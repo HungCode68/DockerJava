@@ -10,34 +10,27 @@ pipeline {
     }
 
     stages {
-       stage('Build WAR') {
+      stage('Build WAR') {
     steps {
         echo '📦 Compiling and packaging WAR file...'
         bat '''
             rem Xoá thư mục build cũ nếu có
             if exist build rmdir /s /q build
-            mkdir build\\classes
-            mkdir build\\warcontent
+            mkdir build
 
-             rem Biên dịch toàn bộ file .java trong src
-            for /R src %%f in (*.java) do (
-                echo compiling %%f
-                javac -d build\\classes -cp "%TOMCAT_PATH%\\lib\\servlet-api.jar" %%f
-            )
+            rem Biên dịch toàn bộ file .java trong src vào build
+            javac -d build -cp "%TOMCAT_PATH%\\lib\\servlet-api.jar" -sourcepath src ^
+                src\\model\\*.java ^
+                src\\controller\\*.java ^
+                src\\utils\\*.java
 
-            rem Copy Web Pages vào warcontent (nếu có)
-            if exist "Web Pages" (
-                xcopy "Web Pages\\*" build\\warcontent /E /I /Y
-            )
+            rem Copy toàn bộ Web Pages (index.html, sinhvien.jsp, v.v...) vào build
+            xcopy "Web Pages\\*" build /E /I /Y
 
-            rem Tạo thư mục WEB-INF/classes và copy class đã biên dịch
-            mkdir build\\warcontent\\WEB-INF\\classes
-            xcopy build\\classes\\* build\\warcontent\\WEB-INF\\classes /E /I /Y
-
-            rem Đóng gói file WAR
-            cd build\\warcontent
-            jar -cvf ..\\QuanLySinhVien.war *
-            cd ..\\..
+            rem Đóng gói WAR trực tiếp từ thư mục build
+            cd build
+            jar -cvf QuanLySinhVien.war *
+            cd ..
         '''
     }
 }
