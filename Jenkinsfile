@@ -19,13 +19,11 @@ pipeline {
             mkdir build\\classes
             mkdir build\\warcontent
 
-            rem Biên dịch các file .java theo cách rõ ràng từng thư mục
-            javac -d build\\classes ^
-              -cp "%TOMCAT_PATH%\\lib\\servlet-api.jar" ^
-              -sourcepath src ^
-              src\\model\\*.java ^
-              src\\controller\\*.java ^
-              src\\utils\\*.java 
+             rem Biên dịch toàn bộ file .java trong src
+            for /R src %%f in (*.java) do (
+                echo compiling %%f
+                javac -d build\\classes -cp "%TOMCAT_PATH%\\lib\\servlet-api.jar" %%f
+            )
 
             rem Copy Web Pages vào warcontent (nếu có)
             if exist "Web Pages" (
@@ -38,7 +36,7 @@ pipeline {
 
             rem Đóng gói file WAR
             cd build\\warcontent
-            jar -cvf build/QuanLySinhVien.war -C build . -C web .
+            jar -cvf ..\\QuanLySinhVien.war *
             cd ..\\..
         '''
     }
