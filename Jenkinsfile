@@ -38,7 +38,7 @@ pipeline {
 
             rem Đóng gói file WAR
             cd build\\warcontent
-            jar -cvf ..\\QuanLySinhVien.war * 
+            jar -cvf build/QuanLySinhVien.war -C build . -C web .
             cd ..\\..
         '''
     }
