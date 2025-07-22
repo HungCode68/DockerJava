@@ -100,7 +100,7 @@ pipeline {
                         error "❌ Port 8086 is already in use. Please free the port before retrying."
                     }
 
-                    bat "docker run -d --name ${CONTAINER_NAME} -p 8085:8085 ${IMAGE_NAME}:${IMAGE_TAG}"
+                    bat "docker run -d --name ${CONTAINER_NAME} -p 8086:8086 ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
         }
