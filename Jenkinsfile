@@ -25,7 +25,7 @@ pipeline {
                 src\\utils\\*.java
 
             rem Copy toàn bộ Web Pages (index.html, sinhvien.jsp, v.v...) vào build
-            xcopy "Web Pages\\*" build /E /I /Y
+            xcopy "Web\\*" build /E /I /Y
 
             rem Đóng gói WAR trực tiếp từ thư mục build
             cd build
